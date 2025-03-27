@@ -1,0 +1,83 @@
+---
+import { Image } from 'astro:assets';
+
+import { book } from '../config.json';
+---
+
+<div class='bg-book-gray relative overflow-hidden'>
+  <div class='max-w-screen-xl mx-auto pt-16 pb-8 text-sm'>
+    <div class='hidden sm:block sm:absolute sm:inset-0'>
+      <svg
+        class='absolute bottom-0 right-0 transform translate-x-1/2 mb-48 text-gray-700 lg:top-0 lg:mt-28 lg:mb-0 xl:transform-none xl:translate-x-0'
+        width='364'
+        height='384'
+        viewBox='0 0 364 384'
+        fill='none'
+        ><defs
+          ><pattern
+            id='eab71dd9-9d7a-47bd-8044-256344ee00d0'
+            x='0'
+            y='0'
+            width='20'
+            height='20'
+            patternUnits='userSpaceOnUse'
+            ><rect x='0' y='0' width='4' height='4' fill='currentColor'></rect>
+          </pattern>
+        </defs><rect
+          width='364'
+          height='384'
+          fill='url(#eab71dd9-9d7a-47bd-8044-256344ee00d0)'></rect>
+      </svg>
+    </div>
+    <div class='relative z-10'>
+      <h2 class='text-5xl mb-10 text-gray-50 px-4'>
+        Que esperar
+        <span class='text-book-theme pl-1'>adentro</span>
+      </h2>
+      <div class='flex-none sm:flex'>
+        <!-- Lista de capítulos -->
+        <div class='text-sm sm:flex-1 px-4 overflow-x-auto sm:overflow-visible'>
+          <ol class="text-gray-400 ml-4 text-2xl mb-4 font-body">
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">INTRODUCCIÓN</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">Retos y Adaptación en el Ecosistema</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">Hubs de Innovación y Redes de Inversión</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">El Potencial de los Retornos y el Impacto Transformador</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">PROPÓSITO</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 1: ENTENDIENDO A LOS ÁNGELES INVERSIONISTAS</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 2: MIGUEL VANEGAS, UN ÁNGEL QUE CONSTRUYE COMUNIDAD</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 3: MARÍA CAMILA GÓMEZ, IMPACTO, CONEXIÓN Y VISIÓN</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 4: CAMILO VILLALBA, LA INNOVACIÓN Y LA ESTRATEGIA</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 5: MARTHA HURTADO Y LA VISIÓN DE UN ÁNGEL INVERSIONISTA COMPROMETIDO</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 6: CÉSAR PÉREZ, LA IMPORTANCIA DEL INVOLUCRAMIENTO Y EL APRENDIZAJE CONTINUO </li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 7: ALEJANDRA LÓPEZ DE MESA, DEMOCRATIZANDO LA INVERSIÓN EN LATINOAMÉRICA</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 8: SANTIAGO TAMAYO, IMPACTO Y PROPÓSITO EN LA INVERSIÓN</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 9: MIRIAM HERZ, MÁS ALLÁ DE LA INVERSIÓN, CONSTRUYENDO LEGADO </li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 10: ANDRÉS GALINDO, UNA NUEVA FORMA DE INVERTIR CONSCIENTEMENTE</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 11: NEIL SHAN, CRUZANDO FRONTERAS</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 12: GREGORIO LONDOÑO, CREANDO REDES PARA IMPULSAR EL VENTURE CAPITAL </li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 13: ALEXANDRA BAQUERO, CONECTANDO EL CAPITAL CON LA INNOVACIÓN </li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 14: CHRISTIAN KLING DE EJECUTIVO A INVERSIONISTA </li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 15: APRENDIZAJES CLAVES Y HOJA DE RUTA PARA NUEVOS ÁNGELES INVERSIONISTAS </li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 16: FORMAS DE INVERTIR EN STARTUPS </li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 17: HERRAMIENTAS PARA INVERSIONISTAS </li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">CAPÍTULO 18: MIRANDO AL FUTURO, CONSTRUYENDO UN ECOSISTEMA SOSTENIBLE</li>
+            <li class="text-sm mb-2 text-gray-100 sm:whitespace-nowrap">GLOSARIO DE STARTUPS Y VENTURE CAPITAL </li>
+          </ol>
+        </div>
+        
+        <!-- Imagen -->
+        <div class='sm:flex-1 px-4 mt-8 sm:mt-0'>
+          <Image
+            class='rounded-md relative z-10 mx-auto'
+            src={'/front-startup_&_angeles.jpg'}
+            width={400}
+            height={500}
+            alt={book.title}
+            format={'avif'}
+            loading={'eager'}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

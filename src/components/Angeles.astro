@@ -1,0 +1,28 @@
+---
+import { Image } from 'astro:assets';
+import angelesImage from '../../public/Angeles.jpg';
+
+interface Props {
+  altText?: string;
+  width?: number;
+  height?: number;
+}
+
+const { 
+  altText = "Imagen", 
+  width = 1000, 
+  height = 500 
+} = Astro.props;
+---
+
+<div class='bg-white w-full'>
+  <div class='w-full flex justify-center items-center'>
+    <Image
+      src={angelesImage}
+      alt={altText}
+      width={width}
+      height={height}
+      class="w-full object-contain"
+    />
+  </div>
+</div>
