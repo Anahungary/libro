@@ -1,12 +1,33 @@
 // src/pages/api/send-scheduled-emails.js
 import { AIRTABLE_PAT, AIRTABLE_BASE_ID_LIBRO } from '../../config';
-import { sendDownloadEmail } from '../../services/emailService';
+import { sendDownloadEmail } from './emailService';
 
 /**
  * Función que envía los correos con enlaces de descarga para compras aprobadas
  * y no procesadas aún - Usa la nueva integración con AWS S3
  */
-export async function GET() {
+export async function GET({ request }) {
+  // Verifica el token de autenticación
+  const url = new URL(request.url);
+  const token = url.searchParams.get('token');
+  
+  // Verifica que existe una variable de entorno API_SECRET_TOKEN
+  if (!process.env.API_SECRET_TOKEN) {
+    console.warn('No se ha configurado API_SECRET_TOKEN en las variables de entorno');
+  }
+  
+  // Comprueba si el token es válido (solo si está configurado)
+  if (process.env.API_SECRET_TOKEN && token !== process.env.API_SECRET_TOKEN) {
+    console.error('Token de autenticación inválido');
+    return new Response(JSON.stringify({
+      success: false,
+      error: 'No autorizado'
+    }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
   console.log('Iniciando envío programado de correos de descarga con S3');
   try {
     // Buscar compras aprobadas que no tengan el email de descarga enviado

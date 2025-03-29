@@ -1,0 +1,14 @@
+name: Scheduled API Call
+
+on:
+  schedule:
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
+
+jobs:
+  call-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call scheduled email endpoint
+        run: |
+          curl -X GET "https://anaprieto.vercel.app/api/send-scheduled-emails?token=${{ secrets.API_TOKEN }}"
