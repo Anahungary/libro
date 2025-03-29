@@ -1,6 +1,6 @@
 // src/pages/api/send-scheduled-emails.js
 import { AIRTABLE_PAT, AIRTABLE_BASE_ID_LIBRO } from '../../config';
-import { sendDownloadEmail } from './emailService';
+import { sendDownloadEmail } from '../../services/emailService';
 
 /**
  * Función que envía los correos con enlaces de descarga para compras aprobadas
