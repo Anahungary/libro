@@ -1,68 +1,73 @@
 ---
 // CommentBox.astro
-// Componente para integrar CommentBox.io en un sitio Astro
+// Componente para integrar CommentBox.io en tu sitio Astro
 
 interface Props {
-  projectId: string;          // Tu ID de proyecto de CommentBox.io
-  className?: string;         // Clase personalizada (opcional)
-  boxId?: string;             // ID personalizado para el div (opcional)
-  sortOrder?: 'best' | 'newest' | 'oldest'; // Orden de comentarios (opcional)
-  darkMode?: boolean;         // Activar modo oscuro (opcional)
+  projectId?: string;
+  sortOrder?: 'best' | 'newest' | 'oldest';
 }
 
 const { 
-  projectId, 
-  className = 'commentbox', 
-  boxId = 'commentbox',
-  sortOrder = 'best',
-  darkMode = false 
+  projectId = '5678187241537536-proj',
+  sortOrder = 'newest'
 } = Astro.props;
 
-// Configuración de color para modo oscuro
-const backgroundColor = darkMode ? '#000' : null;
-const textColor = darkMode ? '#fff' : null;
+// Textos en español para CommentBox
+const textsInSpanish = {
+  "comments": "Comentarios",
+  "loading": "Cargando comentarios...",
+  "comments-none": "No hay comentarios aún",
+  "comments-one": "1 comentario",
+  "comments-multiple": "{n} comentarios",
+  "best": "Destacados",
+  "newest": "Más recientes",
+  "oldest": "Más antiguos",
+  "reply": "Responder",
+  "edit": "Editar",
+  "delete": "Eliminar",
+  "confirm-delete": "¿Estás seguro de que quieres eliminar este comentario?",
+  "post-comment": "Publicar comentario",
+  "comment-placeholder": "Escribe un comentario...",
+  "sign-in": "Iniciar sesión",
+  "sign-out": "Cerrar sesión",
+  "anonymous": "Anónimo",
+  "email-replies": "Respuestas por email",
+  "anonymous-checkbox": "Comentar anónimamente",
+  "mod-badge": "Moderador",
+  "op-badge": "OP",
+  "deleted": "Este comentario ha sido eliminado",
+  "posting-as": "Comentando como",
+  "log-out": "cerrar sesión",
+  "deleted-user": "Usuario eliminado",
+  "now": "ahora",
+  "today": "hoy",
+  "yesterday": "ayer"
+};
 ---
 
-<!-- Div donde se montará el CommentBox -->
-<div class={className} id={boxId}></div>
+<div class="commentbox"></div>
 
-<!-- Script para cargar e inicializar CommentBox -->
-<script define:vars={{
-  projectId,
-  className,
-  boxId,
-  sortOrder,
-  backgroundColor,
-  textColor
-}}>
-  // Función para limpiar CommentBox cuando el componente se desmonta
-  let removeCommentBox;
-
-  // Inicializar CommentBox cuando el componente se monta
-  document.addEventListener('DOMContentLoaded', function() {
-    // Importar el script de CommentBox
-    const script = document.createElement('script');
-    script.src = 'https://unpkg.com/commentbox.io/dist/commentBox.min.js';
-    script.onload = function() {
-      // Inicializar CommentBox con las opciones configuradas
-      removeCommentBox = commentBox(projectId, {
-        className: className,
-        defaultBoxId: boxId,
-        sortOrder: sortOrder,
-        backgroundColor: backgroundColor,
-        textColor: textColor,
-        onCommentCount(count) {
-          console.log(`CommentBox cargado con ${count} comentarios`);
-        }
-      });
-    };
-    document.head.appendChild(script);
-  });
-
-  // Limpiar cuando la página cambie (útil para SPA)
-  document.addEventListener('astro:page-load', function() {
-    if (removeCommentBox) {
-      removeCommentBox();
+<script define:vars={{ projectId, sortOrder, textsInSpanish }}>
+    // @ts-nocheck
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    if (!isLocalhost) {
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/commentbox.io/dist/commentBox.min.js';
+      script.onload = function() {
+        commentBox(projectId, {
+          tlcParam: 'tlc',
+          sortOrder: sortOrder,
+          texts: textsInSpanish
+        });
+      };
+      document.head.appendChild(script);
+    } else {
+      const commentboxElement = document.querySelector('.commentbox');
+      if (commentboxElement) {
+        commentboxElement.innerHTML = 
+          '<div style="padding: 20px; border: 1px solid #eee; text-align: center;">'+
+          'Los comentarios se cargarán en el entorno de producción</div>';
+      }
     }
-  });
-</script>
+  </script>
