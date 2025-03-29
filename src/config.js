@@ -3,7 +3,7 @@ export const AIRTABLE_PAT = import.meta.env.AIRTABLE_PAT;
 export const AIRTABLE_BASE_ID_LIBRO = import.meta.env.AIRTABLE_BASE_ID_LIBRO || 'appJKYPrXMKmCtRyJ';
 
 // Configuración de Wompi (Bancolombia)
-export const WOMPI_PUBLIC_KEY = import.meta.env.PUBLIC_WOMPI_PUBLIC_KEY;
+export const WOMPI_PUBLIC_KEY = import.meta.env.WOMPI_PUBLIC_KEY;
 export const WOMPI_INTEGRITY_SECRET = import.meta.env.WOMPI_INTEGRITY_SECRET;
 
 // Configuración de correo electrónico
