@@ -1,0 +1,68 @@
+---
+// CommentBox.astro
+// Componente para integrar CommentBox.io en un sitio Astro
+
+interface Props {
+  projectId: string;          // Tu ID de proyecto de CommentBox.io
+  className?: string;         // Clase personalizada (opcional)
+  boxId?: string;             // ID personalizado para el div (opcional)
+  sortOrder?: 'best' | 'newest' | 'oldest'; // Orden de comentarios (opcional)
+  darkMode?: boolean;         // Activar modo oscuro (opcional)
+}
+
+const { 
+  projectId, 
+  className = 'commentbox', 
+  boxId = 'commentbox',
+  sortOrder = 'best',
+  darkMode = false 
+} = Astro.props;
+
+// Configuración de color para modo oscuro
+const backgroundColor = darkMode ? '#000' : null;
+const textColor = darkMode ? '#fff' : null;
+---
+
+<!-- Div donde se montará el CommentBox -->
+<div class={className} id={boxId}></div>
+
+<!-- Script para cargar e inicializar CommentBox -->
+<script define:vars={{
+  projectId,
+  className,
+  boxId,
+  sortOrder,
+  backgroundColor,
+  textColor
+}}>
+  // Función para limpiar CommentBox cuando el componente se desmonta
+  let removeCommentBox;
+
+  // Inicializar CommentBox cuando el componente se monta
+  document.addEventListener('DOMContentLoaded', function() {
+    // Importar el script de CommentBox
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/commentbox.io/dist/commentBox.min.js';
+    script.onload = function() {
+      // Inicializar CommentBox con las opciones configuradas
+      removeCommentBox = commentBox(projectId, {
+        className: className,
+        defaultBoxId: boxId,
+        sortOrder: sortOrder,
+        backgroundColor: backgroundColor,
+        textColor: textColor,
+        onCommentCount(count) {
+          console.log(`CommentBox cargado con ${count} comentarios`);
+        }
+      });
+    };
+    document.head.appendChild(script);
+  });
+
+  // Limpiar cuando la página cambie (útil para SPA)
+  document.addEventListener('astro:page-load', function() {
+    if (removeCommentBox) {
+      removeCommentBox();
+    }
+  });
+</script>
