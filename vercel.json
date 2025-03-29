@@ -1,3 +1,8 @@
 {
-  "cleanUrls": true
+  "crons": [
+    {
+      "path": "/api/send-scheduled-emails",
+      "schedule": "0 */4 * * *"
+    }
+  ]
 }

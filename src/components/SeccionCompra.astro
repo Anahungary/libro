@@ -1,5 +1,5 @@
 ---
-import { showCountingSell } from "../config.json";
+import { WOMPI_PUBLIC_KEY, LIBRO_PRECIO, LIBRO_PRECIO_CENTS, LIBRO_TITULO } from "../config";
 import Checkmark from "./icons/Checkmark.astro";
 
 // Definición de los dos modelos de venta
@@ -53,7 +53,6 @@ const pricingOptions = {
       >
         Compra ahora
       </p>
-      
     </div>
   </div>
   
@@ -108,13 +107,12 @@ const pricingOptions = {
                 </ul>
                 <div class="mt-10">
                   <div class="rounded-lg shadow-md">
-                    <a
-                      target="blank"
-                      href={pricingOptions.ebook.button.url}
+                    <button
+                      id="comprarBtn"
                       class="block w-full text-center rounded-lg border border-transparent px-6 py-4 text-xl leading-6 font-semibold text-book-gray bg-book-theme hover:bg-yellow-200 focus:outline-none transition duration-300 ease-in-out"
                     >
                       {pricingOptions.ebook.button.label}
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -169,12 +167,223 @@ const pricingOptions = {
         </div>
       </div>
       
-      {showCountingSell && (
-        <p class="text-center text-base text-gray-700 mt-10">
-          Más de <span class="font-semibold">2,425 copias</span> vendidas
-        </p>
-      )}
+      <p class="text-center text-base text-gray-700 mt-10">
+        Más de <span class="font-semibold">2,425 copias</span> vendidas
+      </p>
       
     </div>
   </div>
 </div>
+
+<!-- Modal de Compra -->
+<div id="compraModal" class="hidden fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50">
+  <div class="flex items-center justify-center min-h-screen px-4">
+    <div class="bg-white rounded-lg max-w-md w-full overflow-hidden shadow-xl">
+      <div class="bg-book-theme px-6 py-4">
+        <h3 class="text-xl font-bold text-book-gray">Comprar {LIBRO_TITULO}</h3>
+      </div>
+      
+      <form id="compraForm" class="px-6 py-4">
+        <div class="mb-4">
+          <label for="nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+          <input type="text" id="nombre" name="nombre" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+        </div>
+        
+        <div class="mb-4">
+          <label for="apellido" class="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
+          <input type="text" id="apellido" name="apellido" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+        </div>
+        
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input type="email" id="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+        </div>
+        
+        <div class="mb-4">
+          <label for="telefono" class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+          <input type="tel" id="telefono" name="telefono" class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+        </div>
+        
+        <div class="mb-6">
+          <label class="flex items-center">
+            <input type="checkbox" id="terminos" name="terminos" class="mr-2" required>
+            <span class="text-sm text-gray-700">He leído y acepto los términos y condiciones</span>
+          </label>
+        </div>
+        
+        <div class="flex justify-end">
+          <button type="button" id="cancelarBtn" class="mr-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
+            Cancelar
+          </button>
+          <button type="submit" id="pagarBtn" class="px-4 py-2 bg-book-theme text-book-gray font-bold rounded-md hover:bg-yellow-400">
+            Pagar con Bancolombia
+          </button>
+        </div>
+      </form>
+      
+      <div id="loadingIndicator" class="hidden px-6 py-4 text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-book-theme mx-auto"></div>
+        <p class="mt-4 text-gray-700">Procesando tu pago...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Script para cargar widget de Wompi -->
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Cargar script de Wompi
+    const wompiScript = document.createElement('script');
+    wompiScript.type = 'text/javascript';
+    wompiScript.src = 'https://checkout.wompi.co/widget.js';
+    document.head.appendChild(wompiScript);
+  });
+</script>
+
+<script define:vars={{ WOMPI_PUBLIC_KEY, LIBRO_PRECIO_CENTS }}>
+document.addEventListener("DOMContentLoaded", () => {
+  const comprarBtn = document.getElementById("comprarBtn");
+  const compraModal = document.getElementById("compraModal");
+  const cancelarBtn = document.getElementById("cancelarBtn");
+  const compraForm = document.getElementById("compraForm");
+  const loadingIndicator = document.getElementById("loadingIndicator");
+
+  // Mostrar/ocultar modal
+  comprarBtn.addEventListener("click", () => compraModal.classList.remove("hidden"));
+  cancelarBtn.addEventListener("click", () => compraModal.classList.add("hidden"));
+
+  compraForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
+    // Mostrar indicador de carga
+    compraForm.classList.add("hidden");
+    loadingIndicator.classList.remove("hidden");
+
+    try {
+      // Recopilar datos del formulario
+      const formData = {
+        nombre: document.getElementById("nombre").value,
+        apellido: document.getElementById("apellido").value,
+        email: document.getElementById("email").value,
+        telefono: document.getElementById("telefono").value
+      };
+      
+      // Generar referencia única
+      const reference = `LIBRO-${Date.now()}`;
+      const amountInCents = parseInt(LIBRO_PRECIO_CENTS);
+
+      // Paso 1: Registrar en Airtable
+      const airtable = await fetch("/api/update-airtable-libro", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, estado: "PENDIENTE" }),
+      });
+      
+      if (!airtable.ok) {
+        throw new Error("No se pudo registrar la compra");
+      }
+
+      // Paso 2: Generar firma para Wompi
+      const sigResp = await fetch("/api/generar-firma", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reference, amountInCents }),
+      });
+      
+      if (!sigResp.ok) {
+        throw new Error("No se pudo generar la firma de integridad");
+      }
+
+      const { signature } = await sigResp.json();
+      
+      // Guardar información en sessionStorage
+      sessionStorage.setItem("userEmail", formData.email);
+      sessionStorage.setItem("userName", `${formData.nombre} ${formData.apellido}`);
+      
+      // Configurar opciones de checkout
+      const checkoutConfig = {
+        currency: 'COP',
+        amountInCents: amountInCents,
+        reference: reference,
+        publicKey: WOMPI_PUBLIC_KEY || 'pub_test_WJDz2IFohyX2NRgkZDTSD0KlnitcAqUi',
+        signature: { integrity: signature },
+        redirectUrl: `${window.location.origin}/confirmacion-pago?email=${encodeURIComponent(formData.email)}&status=APPROVED`,
+        customerData: {
+          email: formData.email,
+          fullName: `${formData.nombre} ${formData.apellido}`,
+          phoneNumber: formData.telefono,
+          phoneNumberPrefix: '+57'
+        }
+      };
+
+      // Inicializar y abrir el widget de Wompi
+      if (typeof WidgetCheckout !== 'undefined') {
+        const checkout = new WidgetCheckout(checkoutConfig);
+        
+        checkout.open(function(result) {
+          console.log("Transacción completada:", result);
+          loadingIndicator.classList.add("hidden");
+          compraForm.classList.remove("hidden");
+          compraModal.classList.add("hidden");
+        });
+      } else {
+        // Wompi no se cargó correctamente, usar redirección alternativa
+        console.warn("Widget de Wompi no disponible, utilizando redirección");
+        
+        // Crear formulario para Web Checkout como alternativa
+        const form = document.createElement('form');
+        form.action = 'https://checkout.wompi.co/p/';
+        form.method = 'GET';
+        form.style.display = 'none';
+        
+        // Agregar campos al formulario
+        const addField = (name, value) => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = name;
+          input.value = value;
+          form.appendChild(input);
+        };
+        
+        addField('public-key', WOMPI_PUBLIC_KEY || 'pub_test_WJDz2IFohyX2NRgkZDTSD0KlnitcAqUi');
+        addField('currency', 'COP');
+        addField('amount-in-cents', amountInCents);
+        addField('reference', reference);
+        addField('signature:integrity', signature);
+        
+        const base = `${window.location.origin}/confirmacion-pago?email=${encodeURIComponent(formData.email)}`;
+        addField('redirect-url', `${base}&status=APPROVED`);
+        addField('failure-redirect-url', `${base}&status=DECLINED`);
+        addField('pending-redirect-url', `${base}&status=PENDING`);
+        
+        // Agregar formulario al DOM y enviarlo
+        document.body.appendChild(form);
+        form.submit();
+      }
+    } catch (err) {
+      console.error("Error durante el proceso de compra:", err);
+      alert("Hubo un error al procesar tu solicitud: " + err.message);
+      loadingIndicator.classList.add("hidden");
+      compraForm.classList.remove("hidden");
+    }
+  });
+});
+</script>
+
+<style>
+  .bg-book-gray {
+    background-color: #2d3748;
+  }
+  
+  .bg-book-theme {
+    background-color: #ffc107;
+  }
+  
+  .border-book-theme {
+    border-color: #ffc107;
+  }
+  
+  .text-book-gray {
+    color: #2d3748;
+  }
+</style>
