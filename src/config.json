@@ -1,5 +1,5 @@
 {
-  "showAmazonTag": false,
+  "showAmazonTag": true,
   "showCountingSell": false,
   "showBuyAudiobookButton": false,
   "sections": {
@@ -34,45 +34,45 @@
     "buyAudiobookUrl": ""
   },
   "sectionPrices": {
-  "priceMain": {
-    "title": "Ebook",
-    "amount": {
-      "decimal": 15,
-      "cents": "000"
+    "priceMain": {
+      "title": "Ebook",
+      "amount": {
+        "decimal": 15,
+        "cents": "000"
+      },
+      "currency": "COP",
+      "details": [
+        "Entrega en las próximas horas por correo electrónico",
+        "Formatos PDF y EPUB para cualquier dispositivo",
+        "Acceso permanente",
+        "Descarga directa"
+      ],
+      "button": {
+        "label": "Comprar por link",
+        "url": "#comprar-ebook"
+      },
+      "tagTitle": {
+        "title": "Más Popular",
+        "cssClass": "text-book-gray bg-book-theme"
+      }
     },
-    "currency": "COP",
-    "details": [
-      "Entrega en las próximas horas por correo electrónico",
-      "Formatos PDF y EPUB para cualquier dispositivo",
-      "Acceso permanente",
-      "Descarga directa"
-    ],
-    "button": {
-      "label": "Comprar por link",
-      "url": "#comprar-ebook"
-    },
-    "tagTitle": {
-      "title": "Más Popular",
-      "cssClass": "text-book-gray bg-book-theme"
-    }
-  },
-  "priceRight": {
-    "title": "Amazon",
-    "amount": {
-      "decimal": 4,
-      "cents": "00"
-    },
-    "currency": "USD",
-    "details": [
-      "Disponible en Amazon Kindle",
-      "Sincronización entre dispositivos", 
-      "Compra segura a través de Amazon",
-      "Soporte técnico de Amazon"
-    ],
-    "button": {
-      "label": "Comprar en Amazon",
-      "url": "https://www.amazon.com/dp/XXXXX"
+    "priceRight": {
+      "title": "Amazon",
+      "amount": {
+        "decimal": 4,
+        "cents": "00"
+      },
+      "currency": "USD",
+      "details": [
+        "Disponible en Amazon Kindle",
+        "Sincronización entre dispositivos", 
+        "Compra segura a través de Amazon",
+        "Soporte técnico de Amazon"
+      ],
+      "button": {
+        "label": "Comprar en Amazon",
+        "url": "https://www.amazon.com/STARTUPS-%C3%81NGELES-primeros-creyentes-cambian-ebook/dp/B0DZJ3FQGX"
+      }
     }
   }
-}
 }

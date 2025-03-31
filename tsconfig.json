@@ -1,6 +1,11 @@
 {
-  "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "types": []
-  }
+    // tus opciones actuales
+  },
+  "include": ["${configDir}/**/*"],
+  "exclude": [
+    "node_modules",
+    "src/components/CommentsSection.astro",
+    "src/components/Disqus.astro"
+  ]
 }
