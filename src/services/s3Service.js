@@ -64,7 +64,7 @@ export async function generateDownloadLinks(email, name) {
         </div>
         
         <div class="footer">
-          <p>Si tienes problemas con la descarga, contáctanos a hello@wearewondertech.com</p>
+          <p>Si tienes problemas con la descarga, contáctanos a anamariaprieto89@gmail.com</p>
           <p>© ${new Date().getFullYear()} WonderTech - Todos los derechos reservados</p>
         </div>
       </body>

@@ -1,5 +1,5 @@
 {
-  "showAmazonTag": true,
+  "showAmazonTag": false,
   "showCountingSell": false,
   "showBuyAudiobookButton": false,
   "sections": {
